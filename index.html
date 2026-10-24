@@ -1,34 +1,75 @@
+
 <!doctype html>
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#10243a">
-<meta name="description" content="Aplicativo didático de instrumentação para monitorar inclinação e vibração usando sensores do Android.">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icon.svg" type="image/svg+xml">
+<meta name="description" content="Aplicativo didático para monitoramento de inclinação e vibração com sensores do celular.">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
 <title>InstruMobi — Instrumentação</title>
+
 <style>
-:root{color-scheme:dark;--bg:#0a1422;--panel:#122237;--panel2:#182d45;--text:#eef5ff;--muted:#9db0c8;--line:#2c425d;--accent:#55c2ff;--ok:#55d6a0;--warn:#ffc857;--danger:#ff6b75}
-*{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#0d1b2c,#07101c);color:var(--text);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-header{padding:22px 18px 15px;background:#10243a;border-bottom:1px solid var(--line)}header .eyebrow{font-size:11px;letter-spacing:2px;color:var(--accent);font-weight:800}h1{font-size:25px;margin:5px 0}header p{margin:0;color:var(--muted);font-size:13px}
-main{max-width:900px;margin:auto;padding:15px;display:grid;gap:13px}.row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.card{background:rgba(18,34,55,.96);border:1px solid var(--line);border-radius:16px;padding:15px;min-width:0}.card h2{font-size:14px;margin:0 0 12px;color:#dceaff}.metric{font-size:34px;font-weight:750;letter-spacing:-1px;line-height:1.15}.unit{font-size:13px;color:var(--muted);font-weight:500}.sub{font-size:12px;color:var(--muted);margin-top:7px}.status{display:inline-flex;align-items:center;gap:7px;padding:5px 9px;border-radius:99px;font-size:12px;background:#24364b;color:var(--muted)}.dot{width:7px;height:7px;border-radius:50%;background:currentColor}.status.ok{color:var(--ok);background:#143b35}.status.warn{color:var(--warn);background:#44381d}.status.bad{color:var(--danger);background:#48242b}
-button{border:0;border-radius:11px;padding:12px 14px;font:inherit;font-weight:700;cursor:pointer;background:var(--accent);color:#071522}button.secondary{background:#263d57;color:var(--text);border:1px solid #3b5470}button.danger{background:#512a34;color:#ffdce0;border:1px solid #81424e}button:disabled{opacity:.5;cursor:not-allowed}.actions{display:flex;gap:9px;flex-wrap:wrap}.actions button{flex:1;min-width:125px}
-label{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:#dceaff;margin:13px 0 6px}input[type=range]{width:100%;accent-color:var(--accent)}input[type=number]{width:90px;background:#091727;color:var(--text);border:1px solid var(--line);padding:8px;border-radius:8px}
-canvas{width:100%;height:190px;display:block;background:#0b1929;border:1px solid #263c55;border-radius:10px}.chart-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin:8px 0 0}.legend-dot{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px}
-.note{font-size:12px;color:var(--muted);margin:0}.callout{border-left:3px solid var(--warn);padding:9px 11px;background:#2d291f;border-radius:5px;color:#f5e8c7;font-size:12px}
-.kv{display:grid;grid-template-columns:1fr auto;gap:8px;font-size:13px;padding:7px 0;border-bottom:1px solid #253950}.kv:last-child{border:0}.kv span:first-child{color:var(--muted)}
-footer{text-align:center;color:var(--muted);font-size:11px;padding:5px 20px 25px}
-@media(min-width:700px){main{grid-template-columns:1fr 1fr}.wide{grid-column:1/-1}.metric{font-size:40px}}
-@media(max-width:380px){.row{grid-template-columns:1fr}.metric{font-size:32px}}
+:root {
+  color-scheme: dark;
+  --bg:#0a1422; --panel:#122237; --text:#eef5ff;
+  --muted:#9db0c8; --line:#2c425d; --accent:#55c2ff;
+  --ok:#55d6a0; --warn:#ffc857; --danger:#ff6b75;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0; background:linear-gradient(160deg,#0d1b2c,#07101c);
+  color:var(--text); font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+}
+header { padding:22px 18px 15px; background:#10243a; border-bottom:1px solid var(--line); }
+.eyebrow { font-size:11px; letter-spacing:2px; color:var(--accent); font-weight:800; }
+h1 { font-size:25px; margin:5px 0; }
+header p { margin:0; color:var(--muted); font-size:13px; }
+main { max-width:900px; margin:auto; padding:15px; display:grid; gap:13px; }
+.row { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+.card { background:rgba(18,34,55,.96); border:1px solid var(--line); border-radius:16px; padding:15px; min-width:0; }
+.card h2 { font-size:14px; margin:0 0 12px; color:#dceaff; }
+.metric { font-size:34px; font-weight:750; letter-spacing:-1px; line-height:1.15; }
+.unit { font-size:13px; color:var(--muted); font-weight:500; }
+.sub { font-size:12px; color:var(--muted); margin-top:7px; }
+.status { display:inline-flex; align-items:center; gap:7px; padding:5px 9px; border-radius:99px; font-size:12px; background:#24364b; color:var(--muted); }
+.dot { width:7px; height:7px; border-radius:50%; background:currentColor; }
+.status.ok { color:var(--ok); background:#143b35; }
+.status.warn { color:var(--warn); background:#44381d; }
+.status.bad { color:var(--danger); background:#48242b; }
+button {
+  border:0; border-radius:11px; padding:12px 14px; font:inherit;
+  font-weight:700; cursor:pointer; background:var(--accent); color:#071522;
+}
+button.secondary { background:#263d57; color:var(--text); border:1px solid #3b5470; }
+button.danger { background:#512a34; color:#ffdce0; border:1px solid #81424e; }
+button:disabled { opacity:.5; cursor:not-allowed; }
+.actions { display:flex; gap:9px; flex-wrap:wrap; }
+.actions button { flex:1; min-width:125px; }
+label { display:flex; justify-content:space-between; gap:10px; font-size:13px; color:#dceaff; margin:13px 0 6px; }
+input[type=range] { width:100%; accent-color:var(--accent); }
+canvas { width:100%; height:190px; display:block; background:#0b1929; border:1px solid #263c55; border-radius:10px; }
+.chart-legend { display:flex; gap:14px; flex-wrap:wrap; font-size:12px; color:var(--muted); margin:8px 0 0; }
+.legend-dot { display:inline-block; width:9px; height:9px; border-radius:3px; margin-right:5px; }
+.note { font-size:12px; color:var(--muted); margin:0; }
+.callout { border-left:3px solid var(--warn); padding:9px 11px; background:#2d291f; border-radius:5px; color:#f5e8c7; font-size:12px; }
+.kv { display:grid; grid-template-columns:1fr auto; gap:8px; font-size:13px; padding:7px 0; border-bottom:1px solid #253950; }
+.kv:last-child { border:0; }
+.kv span:first-child { color:var(--muted); }
+footer { text-align:center; color:var(--muted); font-size:11px; padding:5px 20px 25px; }
+@media(min-width:700px) { main { grid-template-columns:1fr 1fr; } .wide { grid-column:1/-1; } .metric { font-size:40px; } }
+@media(max-width:380px) { .row { grid-template-columns:1fr; } .metric { font-size:32px; } }
 </style>
 </head>
+
 <body>
 <header>
   <div class="eyebrow">LABORATÓRIO DE INSTRUMENTAÇÃO E CONTROLE</div>
   <h1>InstruMobi</h1>
-  <p>Monitoramento de inclinação e vibração com sensores do Android</p>
+  <p>Monitoramento de inclinação e vibração com sensores do celular</p>
 </header>
+
 <main>
   <section class="card wide">
     <div class="actions">
@@ -36,22 +77,31 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:5px 20px 25px
       <button id="stopBtn" class="secondary" disabled>Parar</button>
       <button id="calBtn" class="secondary" disabled>Calibrar referência</button>
     </div>
-    <p style="margin:12px 0 0"><span id="state" class="status"><span class="dot"></span>Parado</span></p>
-    <p class="note" id="sensorInfo" style="margin-top:9px">Aguardando autorização para acessar os sensores.</p>
+    <p style="margin:12px 0 0">
+      <span id="state" class="status"><span class="dot"></span>Parado</span>
+    </p>
+    <p class="note" id="sensorInfo" style="margin-top:9px">
+      Pressione Iniciar medições para começar.
+    </p>
   </section>
 
   <div class="row wide">
     <section class="card">
       <h2>Inclinação estimada</h2>
       <div class="metric"><span id="tilt">—</span><span class="unit"> °</span></div>
-      <div class="sub">Ângulo em relação à referência calibrada</div>
-      <div style="margin-top:12px"><span id="tiltAlarm" class="status"><span class="dot"></span>Sem leitura</span></div>
+      <div class="sub">Variação angular em relação à referência calibrada</div>
+      <div style="margin-top:12px">
+        <span id="tiltAlarm" class="status"><span class="dot"></span>Sem leitura</span>
+      </div>
     </section>
+
     <section class="card">
       <h2>Vibração estimada</h2>
       <div class="metric"><span id="vibration">—</span><span class="unit"> m/s² RMS</span></div>
-      <div class="sub">Aceleração dinâmica filtrada, estimativa didática</div>
-      <div style="margin-top:12px"><span id="vibAlarm" class="status"><span class="dot"></span>Sem leitura</span></div>
+      <div class="sub">Estimativa da aceleração dinâmica filtrada</div>
+      <div style="margin-top:12px">
+        <span id="vibAlarm" class="status"><span class="dot"></span>Sem leitura</span>
+      </div>
     </section>
   </div>
 
@@ -60,9 +110,9 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:5px 20px 25px
     <canvas id="chart" width="900" height="300" aria-label="Gráfico de inclinação e vibração"></canvas>
     <div class="chart-legend">
       <span><i class="legend-dot" style="background:#55c2ff"></i>Inclinação (°)</span>
-      <span><i class="legend-dot" style="background:#ffc857"></i>Vibração RMS (m/s² × escala)</span>
+      <span><i class="legend-dot" style="background:#ffc857"></i>Vibração RMS (m/s² × 10)</span>
     </div>
-    <p class="note" style="margin-top:8px">Exibe as últimas 60 amostras. A curva de vibração é multiplicada por 10 apenas para facilitar a visualização conjunta.</p>
+    <p class="note" style="margin-top:8px">Exibe até 60 amostras recentes. A vibração é multiplicada por 10 apenas no gráfico.</p>
   </section>
 
   <section class="card">
@@ -71,7 +121,7 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:5px 20px 25px
     <input id="tiltLimit" type="range" min="1" max="90" value="15">
     <label for="vibLimit">Vibração RMS máxima <strong><span id="vibLimitLabel">1,5</span> m/s²</strong></label>
     <input id="vibLimit" type="range" min="0.1" max="5" step="0.1" value="1.5">
-    <p class="note">Os limites são configuráveis para demonstração. Ajuste-os conforme os testes, não como limites de segurança certificados.</p>
+    <p class="note">Limites demonstrativos, não certificados para segurança industrial.</p>
   </section>
 
   <section class="card">
@@ -88,183 +138,469 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:5px 20px 25px
 
   <section class="card wide">
     <h2>Princípio de funcionamento</h2>
-    <p class="note">O acelerômetro mede aceleração nos eixos do aparelho. A inclinação é estimada pela orientação do dispositivo em relação à gravidade; a vibração é estimada retirando uma componente lenta da aceleração. O desempenho depende do modelo do celular, da taxa de amostragem e do ruído dos sensores.</p>
-    <div class="callout" style="margin-top:12px">Limitação: esta é uma ferramenta didática, não um instrumento certificado. Não utilize as leituras para decisões críticas de segurança, manutenção industrial ou diagnóstico de máquinas.</div>
+    <p class="note">A orientação do aparelho é usada para estimar a inclinação relativa. A aceleração é filtrada para estimar a componente dinâmica associada à vibração. Os resultados dependem do aparelho, da posição, da taxa de amostragem e do ruído dos sensores.</p>
+    <div class="callout" style="margin-top:12px">Protótipo acadêmico didático. Não substitui instrumentos calibrados nem deve ser utilizado para decisões críticas de segurança ou manutenção.</div>
   </section>
 </main>
+
 <footer>InstruMobi • Protótipo acadêmico • Os dados permanecem nesta sessão até serem exportados ou apagados.</footer>
+
 <script>
 (() => {
+  'use strict';
+
   const $ = id => document.getElementById(id);
   const stateEl = $('state');
-  let running = false, orientationSeen = false, motionSeen = false;
-  let baseBeta = null, baseGamma = null, filtered = {x:0,y:0,z:0};
-  let latest = {tilt:null,vib:null,beta:null,gamma:null};
-  let samples = [], alarms = [], lastAlarmKey = '', lastPaint = 0;
-  let maxTilt = 0, maxVib = 0;
-  const MAX_POINTS = 60;
-  const fmt = (v,n=2) => Number.isFinite(v) ? v.toLocaleString('pt-BR',{minimumFractionDigits:n,maximumFractionDigits:n}) : '—';
-  function setStatus(el, text, kind='') {
-    el.className = 'status ' + kind;
-    el.innerHTML = '<span class="dot"></span>' + text;
+
+  let running = false;
+  let orientationSeen = false;
+  let motionSeen = false;
+  let baseBeta = null;
+  let baseGamma = null;
+  let filtered = {x:null, y:null, z:null};
+  let latest = {tilt:null, vib:null, beta:null, gamma:null};
+  let samples = [];
+  let alarms = [];
+  let lastAlarmKey = '';
+  let lastPaint = 0;
+  let maxTilt = 0;
+  let maxVib = 0;
+
+  const MAX_SAMPLES = 3000;
+  const MAX_GRAPH_POINTS = 60;
+
+  const fmt = (value, decimals=2) =>
+    Number.isFinite(value)
+      ? value.toLocaleString('pt-BR', {
+          minimumFractionDigits:decimals,
+          maximumFractionDigits:decimals
+        })
+      : '—';
+
+  function setStatus(element, text, kind='') {
+    element.className = 'status ' + kind;
+    element.replaceChildren();
+    const dot = document.createElement('span');
+    dot.className = 'dot';
+    element.append(dot, document.createTextNode(text));
   }
-  function setState(text, kind='') { setStatus(stateEl,text,kind); }
+
+  function setState(text, kind='') {
+    setStatus(stateEl, text, kind);
+  }
+
   function redraw() {
-    const canvas = $('chart'), ctx = canvas.getContext('2d');
-    const w = canvas.width, h = canvas.height, pad = 42;
-    ctx.clearRect(0,0,w,h);
-    ctx.fillStyle='#0b1929';ctx.fillRect(0,0,w,h);
-    ctx.font='14px system-ui';ctx.strokeStyle='#263c55';ctx.lineWidth=1;
-    for(let i=0;i<=4;i++){
-      const y=pad+(h-pad*1.4)*i/4;
-      ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(w-12,y);ctx.stroke();
+    const canvas = $('chart');
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const w = canvas.width;
+    const h = canvas.height;
+    const pad = 42;
+
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = '#0b1929';
+    ctx.fillRect(0, 0, w, h);
+    ctx.font = '12px system-ui';
+    ctx.strokeStyle = '#263c55';
+    ctx.lineWidth = 1;
+
+    const plotH = h - pad * 1.4;
+    const plotW = w - pad - 12;
+
+    for (let i=0; i<=4; i++) {
+      const y = pad + plotH * i / 4;
+      ctx.beginPath();
+      ctx.moveTo(pad, y);
+      ctx.lineTo(w-12, y);
+      ctx.stroke();
     }
-    ctx.fillStyle='#9db0c8';ctx.font='12px system-ui';
-    ctx.fillText('0',12,h-pad*.7);ctx.fillText('90° / 5 m/s²',8,16);
-    const points=samples.slice(-MAX_POINTS);
-    if(points.length<2){ctx.fillText('Inicie as medições para visualizar o gráfico',pad+10,h/2);return;}
-    const plotH=h-pad*1.4, plotW=w-pad-12;
-    const line=(key,color,scale,max)=>{
-      ctx.beginPath();ctx.strokeStyle=color;ctx.lineWidth=2.5;
-      points.forEach((p,i)=>{
-        const x=pad+i/(MAX_POINTS-1)*plotW;
-        const value=Math.max(0,Math.min(max,(p[key]||0)*scale));
-        const y=pad+plotH-(value/max)*plotH;
-        if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
-      });ctx.stroke();
-    };
-    line('tilt', '#55c2ff',1,90);
-    line('vib','#ffc857',10,50);
-  }
-  function addAlarm(type,value,limit){
-    const key=type+':'+Math.floor(Date.now()/3000);
-    if(key===lastAlarmKey)return;
-    lastAlarmKey=key;
-    alarms.push({time:new Date().toISOString(),type,value,limit});
-    $('alarmCount').textContent=alarms.length;
-    if(navigator.vibrate) navigator.vibrate([120,70,120]);
-  }
-  function updateReadings(beta,gamma,ax,ay,az,source){
-    if(!running)return;
-    orientationSeen = Number.isFinite(beta) || orientationSeen;
-    motionSeen = [ax,ay,az].some(Number.isFinite) || motionSeen;
-    if(Number.isFinite(beta)&&Number.isFinite(gamma)){
-      if(baseBeta===null){baseBeta=beta;baseGamma=gamma;}
-      const db=beta-baseBeta, dg=gamma-baseGamma;
-      latest.beta=beta;latest.gamma=gamma;
-      latest.tilt=Math.sqrt(db*db+dg*dg);
-      $('tilt').textContent=fmt(latest.tilt,1);
-      const limit=Number($('tiltLimit').value);
-      if(latest.tilt>limit){setStatus($('tiltAlarm'),'ALERTA: inclinação acima do limite','bad');addAlarm('inclinacao',latest.tilt,limit);}
-      else setStatus($('tiltAlarm'),'Normal','ok');
-      maxTilt=Math.max(maxTilt,latest.tilt);$('maxTilt').textContent=fmt(maxTilt,1)+'°';
-    }
-    if([ax,ay,az].every(Number.isFinite)){
-      const alpha=0.88;
-      filtered.x=alpha*filtered.x+(1-alpha)*ax;
-      filtered.y=alpha*filtered.y+(1-alpha)*ay;
-      filtered.z=alpha*filtered.z+(1-alpha)*az;
-      const dx=ax-filtered.x,dy=ay-filtered.y,dz=az-filtered.z;
-      const dynamic=Math.sqrt(dx*dx+dy*dy+dz*dz);
-      // Suavização RMS aproximada para leitura didática
-      latest.vib=latest.vib===null?dynamic:Math.sqrt(0.75*latest.vib*latest.vib+0.25*dynamic*dynamic);
-      $('vibration').textContent=fmt(latest.vib,2);
-      const limit=Number($('vibLimit').value);
-      if(latest.vib>limit){setStatus($('vibAlarm'),'ALERTA: vibração acima do limite','bad');addAlarm('vibracao',latest.vib,limit);}
-      else setStatus($('vibAlarm'),'Normal','ok');
-      maxVib=Math.max(maxVib,latest.vib);$('maxVib').textContent=fmt(maxVib,2)+' m/s²';
-    }
-    if(latest.tilt!==null||latest.vib!==null){
-      const p={time:new Date().toISOString(),tilt:latest.tilt,vib:latest.vib,beta:latest.beta,gamma:latest.gamma,ax,ay,az};
-      samples.push(p);
-      if(samples.length>3000)samples.shift();
-      $('sampleCount').textContent=samples.length;
-      $('exportBtn').disabled=samples.length===0;
-      const now=performance.now();if(now-lastPaint>160){redraw();lastPaint=now;}
-    }
-    if(orientationSeen&&motionSeen)$('sensorInfo').textContent='Sensores ativos. Mova o aparelho com cuidado para observar as alterações.';
-    else if(orientationSeen)$('sensorInfo').textContent='Orientação disponível; aguardando dados de aceleração.';
-    else if(motionSeen)$('sensorInfo').textContent='Aceleração disponível; aguardando dados de orientação.';
-  }
-  function onOrientation(e){
-    if(!running)return;
-    if(Number.isFinite(e.beta)&&Number.isFinite(e.gamma)){
-      const a=e.beta, b=e.gamma;
-      updateReadings(a,b,NaN,NaN,NaN,'orientation');
-    }
-  }
-  function onMotion(e){
-    if(!running)return;
-    let a=e.acceleration;
-    if(!a || !Number.isFinite(a.x)||!Number.isFinite(a.y)||!Number.isFinite(a.z)) a=e.accelerationIncludingGravity;
-    if(a && [a.x,a.y,a.z].every(Number.isFinite)){
-      // Se só existir aceleração incluindo gravidade, o filtro de componente lenta atenua a gravidade.
-      updateReadings(NaN,NaN,a.x,a.y,a.z,'motion');
-    }
-  }
-  async function start(){
-    if(running)return;
-    if(!('DeviceMotionEvent' in window) && !('DeviceOrientationEvent' in window)){
-      setState('Sensores não suportados','bad');
-      $('sensorInfo').textContent='Este navegador não disponibilizou APIs de movimento. Tente Chrome no Android e verifique as permissões.';
+
+    ctx.fillStyle = '#9db0c8';
+    ctx.fillText('0', 12, h-pad*.7);
+    ctx.fillText('90° / 5 m/s²', 8, 16);
+
+    const points = samples.slice(-MAX_GRAPH_POINTS);
+    if (points.length < 2) {
+      ctx.fillText('Inicie as medições para visualizar o gráfico', pad+10, h/2);
       return;
     }
-    try{
-       typeof DeviceMotionEvent.requestPermission === 'function'
-    ? DeviceMotionEvent.requestPermission()
-    : null;
 
-const pedidoOrientacao =
-  typeof DeviceOrientationEvent !== 'undefined' &&
-  typeof DeviceOrientationEvent.requestPermission === 'function'
-    ? DeviceOrientationEvent.requestPermission()
-    : null;
+    function drawLine(key, color, scale, max) {
+      ctx.beginPath();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2.5;
+      let started = false;
 
-const [permissaoMovimento, permissaoOrientacao] =
-  await Promise.all([
-    pedidoMovimento,
-    pedidoOrientacao
-  ]);
+      points.forEach((point, i) => {
+        const value = point[key];
+        if (!Number.isFinite(value)) {
+          started = false;
+          return;
+        }
+
+        const x = pad + i / (MAX_GRAPH_POINTS-1) * plotW;
+        const bounded = Math.max(0, Math.min(max, value*scale));
+        const y = pad + plotH - bounded/max*plotH;
+
+        if (!started) {
+          ctx.moveTo(x, y);
+          started = true;
+        } else {
+          ctx.lineTo(x, y);
+        }
+      });
+      ctx.stroke();
     }
-      running=true;baseBeta=null;baseGamma=null;filtered={x:0,y:0,z:0};latest={tilt:null,vib:null,beta:null,gamma:null};orientationSeen=false;motionSeen=false;
-      window.addEventListener('deviceorientation',onOrientation);
-      window.addEventListener('devicemotion',onMotion);
-      $('startBtn').disabled=true;$('stopBtn').disabled=false;$('calBtn').disabled=false;
-      setState('Medição ativa','ok');
-      $('sensorInfo').textContent='Solicitando dados dos sensores…';
-    }catch(err){
-      setState('Permissão necessária','warn');
-      $('sensorInfo').textContent=err.message+' Se necessário, permita o acesso a sensores nas configurações do navegador.';
+
+    drawLine('tilt', '#55c2ff', 1, 90);
+    drawLine('vib', '#ffc857', 10, 50);
+  }
+
+  function recordAlarm(type, value, limit) {
+    const key = type + ':' + Math.floor(Date.now()/3000);
+    if (key === lastAlarmKey) return;
+    lastAlarmKey = key;
+
+    alarms.push({
+      time:new Date().toISOString(),
+      type,
+      value,
+      limit
+    });
+
+    $('alarmCount').textContent = alarms.length;
+
+    if (typeof navigator.vibrate === 'function') {
+      navigator.vibrate([120, 70, 120]);
     }
   }
-  function stop(){
-    if(!running)return;
-    running=false;window.removeEventListener('deviceorientation',onOrientation);window.removeEventListener('devicemotion',onMotion);
-    $('startBtn').disabled=false;$('stopBtn').disabled=true;$('calBtn').disabled=true;
-    setState('Parado','');$('sensorInfo').textContent='Medição pausada. Os dados coletados continuam disponíveis para exportação.';
+
+  function updateReadings(beta, gamma, ax, ay, az) {
+    if (!running) return;
+
+    if (Number.isFinite(beta) && Number.isFinite(gamma)) {
+      orientationSeen = true;
+      latest.beta = beta;
+      latest.gamma = gamma;
+
+      if (baseBeta === null || baseGamma === null) {
+        baseBeta = beta;
+        baseGamma = gamma;
+      }
+
+      const db = beta - baseBeta;
+      const dg = gamma - baseGamma;
+      latest.tilt = Math.sqrt(db*db + dg*dg);
+
+      $('tilt').textContent = fmt(latest.tilt, 1);
+
+      const tiltLimit = Number($('tiltLimit').value);
+      if (latest.tilt > tiltLimit) {
+        setStatus($('tiltAlarm'), 'ALERTA: inclinação acima do limite', 'bad');
+        recordAlarm('inclinacao', latest.tilt, tiltLimit);
+      } else {
+        setStatus($('tiltAlarm'), 'Normal', 'ok');
+      }
+
+      maxTilt = Math.max(maxTilt, latest.tilt);
+      $('maxTilt').textContent = fmt(maxTilt, 1) + '°';
+    }
+
+    if ([ax, ay, az].every(Number.isFinite)) {
+      motionSeen = true;
+
+      const alpha = 0.88;
+      if (filtered.x === null) {
+        filtered = {x:ax, y:ay, z:az};
+      }
+
+      filtered.x = alpha*filtered.x + (1-alpha)*ax;
+      filtered.y = alpha*filtered.y + (1-alpha)*ay;
+      filtered.z = alpha*filtered.z + (1-alpha)*az;
+
+      const dx = ax - filtered.x;
+      const dy = ay - filtered.y;
+      const dz = az - filtered.z;
+      const dynamic = Math.sqrt(dx*dx + dy*dy + dz*dz);
+
+      latest.vib = latest.vib === null
+        ? dynamic
+        : Math.sqrt(0.75*latest.vib*latest.vib + 0.25*dynamic*dynamic);
+
+      $('vibration').textContent = fmt(latest.vib, 2);
+
+      const vibLimit = Number($('vibLimit').value);
+      if (latest.vib > vibLimit) {
+        setStatus($('vibAlarm'), 'ALERTA: vibração acima do limite', 'bad');
+        recordAlarm('vibracao', latest.vib, vibLimit);
+      } else {
+        setStatus($('vibAlarm'), 'Normal', 'ok');
+      }
+
+      maxVib = Math.max(maxVib, latest.vib);
+      $('maxVib').textContent = fmt(maxVib, 2) + ' m/s²';
+    }
+
+    if (latest.tilt !== null || latest.vib !== null) {
+      samples.push({
+        time:new Date().toISOString(),
+        tilt:latest.tilt,
+        vib:latest.vib,
+        beta:latest.beta,
+        gamma:latest.gamma,
+        ax, ay, az
+      });
+
+      if (samples.length > MAX_SAMPLES) samples.shift();
+
+      $('sampleCount').textContent = samples.length;
+      $('exportBtn').disabled = samples.length === 0;
+
+      const now = performance.now();
+      if (now-lastPaint > 160) {
+        redraw();
+        lastPaint = now;
+      }
+    }
+
+    if (orientationSeen && motionSeen) {
+      $('sensorInfo').textContent =
+        'Sensores ativos. Mova o aparelho com cuidado para observar as leituras.';
+    } else if (orientationSeen) {
+      $('sensorInfo').textContent =
+        'Orientação disponível; aguardando dados de aceleração.';
+    } else if (motionSeen) {
+      $('sensorInfo').textContent =
+        'Aceleração disponível; aguardando dados de orientação.';
+    }
   }
-  $('startBtn').addEventListener('click',start);
-  $('stopBtn').addEventListener('click',stop);
-  $('calBtn').addEventListener('click',()=>{
-    if(latest.beta!==null&&latest.gamma!==null){baseBeta=latest.beta;baseGamma=latest.gamma;setStatus($('tiltAlarm'),'Referência recalibrada','ok');$('tilt').textContent='0,0';}
+
+  function onOrientation(event) {
+    if (!running) return;
+    if (Number.isFinite(event.beta) && Number.isFinite(event.gamma)) {
+      updateReadings(event.beta, event.gamma, NaN, NaN, NaN);
+    }
+  }
+
+  function onMotion(event) {
+    if (!running) return;
+
+    let acceleration = event.acceleration;
+
+    if (!acceleration ||
+        ![acceleration.x, acceleration.y, acceleration.z].every(Number.isFinite)) {
+      acceleration = event.accelerationIncludingGravity;
+    }
+
+    if (acceleration &&
+        [acceleration.x, acceleration.y, acceleration.z].every(Number.isFinite)) {
+      updateReadings(
+        NaN, NaN,
+        acceleration.x,
+        acceleration.y,
+        acceleration.z
+      );
+    }
+  }
+
+  async function start() {
+    if (running) return;
+
+    if (!('DeviceMotionEvent' in window) &&
+        !('DeviceOrientationEvent' in window)) {
+      setState('Sensores não suportados', 'bad');
+      $('sensorInfo').textContent =
+        'Este navegador não disponibilizou as APIs de movimento. Abra o endereço no Chrome do celular.';
+      return;
+    }
+
+    if (!window.isSecureContext) {
+      setState('Conexão não segura', 'bad');
+      $('sensorInfo').textContent =
+        'Os sensores exigem HTTPS. Abra o endereço publicado no GitHub Pages.';
+      return;
+    }
+
+    $('startBtn').disabled = true;
+    setState('Verificando acesso', 'warn');
+    $('sensorInfo').textContent = 'Verificando autorização dos sensores…';
+
+    try {
+      // Alguns navegadores, especialmente Safari no iOS, exigem autorização explícita.
+      // No Chrome Android, normalmente essas funções não existem.
+      if (typeof DeviceMotionEvent !== 'undefined' &&
+          typeof DeviceMotionEvent.requestPermission === 'function') {
+        const permission = await DeviceMotionEvent.requestPermission();
+        if (permission !== 'granted') {
+          throw new Error('A permissão para acessar o movimento não foi concedida.');
+        }
+      }
+
+      if (typeof DeviceOrientationEvent !== 'undefined' &&
+          typeof DeviceOrientationEvent.requestPermission === 'function') {
+        const permission = await DeviceOrientationEvent.requestPermission();
+        if (permission !== 'granted') {
+          throw new Error('A permissão para acessar a orientação não foi concedida.');
+        }
+      }
+
+      baseBeta = null;
+      baseGamma = null;
+      filtered = {x:null, y:null, z:null};
+      latest = {tilt:null, vib:null, beta:null, gamma:null};
+      orientationSeen = false;
+      motionSeen = false;
+      lastAlarmKey = '';
+
+      window.removeEventListener('deviceorientation', onOrientation);
+      window.removeEventListener('devicemotion', onMotion);
+      window.addEventListener('deviceorientation', onOrientation);
+      window.addEventListener('devicemotion', onMotion);
+
+      running = true;
+      $('stopBtn').disabled = false;
+      $('calBtn').disabled = false;
+      setState('Medição ativa', 'ok');
+      $('sensorInfo').textContent =
+        'Aguardando os primeiros dados dos sensores…';
+
+      // Alguns aparelhos não disponibilizam os dados, mesmo sem erro de permissão.
+      window.setTimeout(() => {
+        if (running && !orientationSeen && !motionSeen) {
+          $('sensorInfo').textContent =
+            'Nenhuma leitura recebida ainda. Verifique as permissões do site, os sensores e tente novamente.';
+        }
+      }, 4000);
+
+    } catch (error) {
+      running = false;
+      $('startBtn').disabled = false;
+      $('stopBtn').disabled = true;
+      $('calBtn').disabled = true;
+      setState('Não foi possível iniciar', 'bad');
+      $('sensorInfo').textContent =
+        (error && error.message ? error.message : 'Erro ao acessar os sensores.') +
+        ' Verifique as permissões do navegador.';
+    }
+  }
+
+  function stop() {
+    running = false;
+    window.removeEventListener('deviceorientation', onOrientation);
+    window.removeEventListener('devicemotion', onMotion);
+
+    $('startBtn').disabled = false;
+    $('stopBtn').disabled = true;
+    $('calBtn').disabled = true;
+
+    setState('Parado');
+    $('sensorInfo').textContent =
+      'Medição pausada. Os dados coletados continuam disponíveis para exportação.';
+  }
+
+  $('startBtn').addEventListener('click', start);
+  $('stopBtn').addEventListener('click', stop);
+
+  $('calBtn').addEventListener('click', () => {
+    if (latest.beta !== null && latest.gamma !== null) {
+      baseBeta = latest.beta;
+      baseGamma = latest.gamma;
+      latest.tilt = 0;
+      $('tilt').textContent = '0,0';
+      setStatus($('tiltAlarm'), 'Referência recalibrada', 'ok');
+    } else {
+      $('sensorInfo').textContent =
+        'Não há leitura de orientação para calibrar. Mova o aparelho e tente novamente.';
+    }
   });
-  $('tiltLimit').addEventListener('input',e=>$('tiltLimitLabel').textContent=e.target.value);
-  $('vibLimit').addEventListener('input',e=>$('vibLimitLabel').textContent=fmt(Number(e.target.value),1));
-  $('exportBtn').addEventListener('click',()=>{
-    if(!samples.length)return;
-    const header=['timestamp','inclinacao_graus','vibracao_rms_m_s2','beta_graus','gamma_graus','ax_m_s2','ay_m_s2','az_m_s2'];
-    const rows=samples.map(p=>[p.time,p.tilt,p.vib,p.beta,p.gamma,p.ax,p.ay,p.az].map(v=>v==null?'':String(v)).join(','));
-    const alarmRows=['','ALARMES','timestamp,tipo,valor,limite',...alarms.map(a=>[a.time,a.type,a.value,a.limit].join(','))];
-    const blob=new Blob([[header.join(','),...rows,...alarmRows].join('\r\n')],{type:'text/csv;charset=utf-8'});
-    const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='instrumobi_medicoes.csv';a.click();URL.revokeObjectURL(url);
+
+  $('tiltLimit').addEventListener('input', event => {
+    $('tiltLimitLabel').textContent = event.target.value;
   });
-  $('clearBtn').addEventListener('click',()=>{
-    if(running)stop();samples=[];alarms=[];maxTilt=0;maxVib=0;lastAlarmKey='';
-    $('sampleCount').textContent='0';$('alarmCount').textContent='0';$('maxTilt').textContent='—';$('maxVib').textContent='—';$('exportBtn').disabled=true;
-    $('tilt').textContent='—';$('vibration').textContent='—';setStatus($('tiltAlarm'),'Sem leitura');setStatus($('vibAlarm'),'Sem leitura');redraw();
+
+  $('vibLimit').addEventListener('input', event => {
+    $('vibLimitLabel').textContent = fmt(Number(event.target.value), 1);
   });
-  window.addEventListener('resize',redraw);redraw();
-  if('serviceWorker' in navigator && location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+
+  $('exportBtn').addEventListener('click', () => {
+    if (!samples.length) return;
+
+    const header = [
+      'timestamp','inclinacao_graus','vibracao_rms_m_s2',
+      'beta_graus','gamma_graus','ax_m_s2','ay_m_s2','az_m_s2'
+    ];
+
+    const rows = samples.map(point =>
+      [point.time,point.tilt,point.vib,point.beta,point.gamma,
+       point.ax,point.ay,point.az]
+      .map(value => value == null ? '' : String(value))
+      .join(',')
+    );
+
+    const alarmRows = [
+      '',
+      'ALARMES',
+      'timestamp,tipo,valor,limite',
+      ...alarms.map(alarm =>
+        [alarm.time,alarm.type,alarm.value,alarm.limit].join(',')
+      )
+    ];
+
+    const csv = [header.join(','), ...rows, ...alarmRows].join('\r\n');
+    const blob = new Blob(['\uFEFF' + csv], {
+      type:'text/csv;charset=utf-8'
+    });
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'instrumobi_medicoes.csv';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
+
+  $('clearBtn').addEventListener('click', () => {
+    if (running) stop();
+
+    samples = [];
+    alarms = [];
+    maxTilt = 0;
+    maxVib = 0;
+    lastAlarmKey = '';
+    baseBeta = null;
+    baseGamma = null;
+    filtered = {x:null, y:null, z:null};
+    latest = {tilt:null, vib:null, beta:null, gamma:null};
+
+    $('sampleCount').textContent = '0';
+    $('alarmCount').textContent = '0';
+    $('maxTilt').textContent = '—';
+    $('maxVib').textContent = '—';
+    $('exportBtn').disabled = true;
+    $('tilt').textContent = '—';
+    $('vibration').textContent = '—';
+
+    setStatus($('tiltAlarm'), 'Sem leitura');
+    setStatus($('vibAlarm'), 'Sem leitura');
+    redraw();
+  });
+
+  window.addEventListener('resize', redraw);
+  redraw();
+
+  // Registra o service worker existente. A atualização do cache será feita separadamente.
+  if ('serviceWorker' in navigator &&
+      window.location.protocol === 'https:') {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').catch(error => {
+        console.error('Falha ao registrar o service worker:', error);
+      });
+    });
+  }
 })();
 </script>
 </body>
