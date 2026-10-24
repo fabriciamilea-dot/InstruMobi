@@ -1,0 +1,19 @@
+{
+  "name": "InstruMobi — Instrumentação e Controle",
+  "short_name": "InstruMobi",
+  "description": "Monitoramento didático de inclinação e vibração com sensores do Android.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a1422",
+  "theme_color": "#10243a",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
