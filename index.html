@@ -210,12 +210,22 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:5px 20px 25px
       return;
     }
     try{
-      if(typeof DeviceMotionEvent!=='undefined' && typeof DeviceMotionEvent.requestPermission==='function'){
-        const p=await DeviceMotionEvent.requestPermission();if(p!=='granted')throw new Error('Permissão de movimento negada.');
-      }
-      if(typeof DeviceOrientationEvent!=='undefined' && typeof DeviceOrientationEvent.requestPermission==='function'){
-        const p=await DeviceOrientationEvent.requestPermission();if(p!=='granted')throw new Error('Permissão de orientação negada.');
-      }
+       typeof DeviceMotionEvent.requestPermission === 'function'
+    ? DeviceMotionEvent.requestPermission()
+    : null;
+
+const pedidoOrientacao =
+  typeof DeviceOrientationEvent !== 'undefined' &&
+  typeof DeviceOrientationEvent.requestPermission === 'function'
+    ? DeviceOrientationEvent.requestPermission()
+    : null;
+
+const [permissaoMovimento, permissaoOrientacao] =
+  await Promise.all([
+    pedidoMovimento,
+    pedidoOrientacao
+  ]);
+    }
       running=true;baseBeta=null;baseGamma=null;filtered={x:0,y:0,z:0};latest={tilt:null,vib:null,beta:null,gamma:null};orientationSeen=false;motionSeen=false;
       window.addEventListener('deviceorientation',onOrientation);
       window.addEventListener('devicemotion',onMotion);
